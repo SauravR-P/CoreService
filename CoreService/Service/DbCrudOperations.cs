@@ -1,4 +1,5 @@
 ﻿using CoreService.Repository;
+using CoreService.RequestModels;
 
 namespace CoreService.Service
 {
@@ -9,12 +10,12 @@ namespace CoreService.Service
             throw new NotImplementedException();
         }
 
-        public Task<T> DeleteAsync<T>(int Id)
+        public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<T> UpdateAsync<T>(int Id)
+        public Task<T> UpdateAsync<T>(EmployeeCreateRequestModel employee)
         {
             throw new NotImplementedException();
         }
