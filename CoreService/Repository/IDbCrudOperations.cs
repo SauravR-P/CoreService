@@ -4,7 +4,7 @@ namespace CoreService.Repository
 {
     public interface IDbCrudOperations
     {
-        Task<T> CreateAsync<T>(T entity);
+        Task CreateAsync<T>(EmployeeCreateRequestModel employeeCreateRequestModel);
         Task<T> UpdateAsync<T>(EmployeeCreateRequestModel employee);
         Task DeleteAsync(int id);
     }

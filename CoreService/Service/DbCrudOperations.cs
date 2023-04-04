@@ -1,21 +1,41 @@
-﻿using CoreService.Repository;
+﻿using CoreService.MQ;
+using CoreService.Repository;
 using CoreService.RequestModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoreService.Service
 {
     public class DbCrudOperations : IDbCrudOperations
     {
-        public Task<T> CreateAsync<T>(T entity)
+        private IRabbitManager _rabbitManager;
+
+
+        public DbCrudOperations(IRabbitManager rabbitManager)
         {
-            throw new NotImplementedException();
+            _rabbitManager = rabbitManager;
+        }
+        public Task CreateAsync<T>(EmployeeCreateRequestModel employeeCreateRequestModel) 
+        {
+            try
+
+            {
+                var msg = employeeCreateRequestModel;
+                _rabbitManager.Publish(msg, "EmployeeExchange", "topic", "Create");
+                //_rabbitManager.SendCreateMessage(msg);
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
-
-        public Task<T> UpdateAsync<T>(EmployeeCreateRequestModel employee)
+        Task<T> IDbCrudOperations.UpdateAsync<T>(EmployeeCreateRequestModel employee)
         {
             throw new NotImplementedException();
         }

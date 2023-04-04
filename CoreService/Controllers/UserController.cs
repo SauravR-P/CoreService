@@ -1,4 +1,5 @@
-﻿using CoreService.Repository;
+﻿using CoreService.MQ;
+using CoreService.Repository;
 using CoreService.RequestModels;
 using CoreService.Service;
 using Microsoft.AspNetCore.Http;
@@ -10,20 +11,22 @@ namespace CoreService.Controllers
     {
 
         private IDbCrudOperations _operations;
+        private IRabbitManager _rabbitManager;
 
-        public UserController()
+        public UserController(IRabbitManager rabbitManager)
         {
-            _operations = new DbCrudOperations();
+            _rabbitManager= rabbitManager;
+            _operations = new DbCrudOperations(_rabbitManager);
 
         }
 
         // POST: UserController/Create
         [HttpPost("CreateEmp")]
-        public ActionResult Create(EmployeeCreateRequestModel requestModel)
+        public ActionResult Create([FromBody] EmployeeCreateRequestModel requestModel)
         {
             try
             {
-                _operations.CreateAsync(requestModel);
+                _operations.CreateAsync<EmployeeCreateRequestModel>(requestModel);
                 return Ok(requestModel);
             }
             catch
@@ -36,7 +39,7 @@ namespace CoreService.Controllers
         {
             try
             {
-                _operations.CreateAsync(requestModel);
+               // _operations.CreateAsync< ProjectRequestModel>(requestModel);
                 return Ok(requestModel);
             }
             catch
